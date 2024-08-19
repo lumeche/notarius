@@ -57,8 +57,10 @@ public class DBCachedUrlMapper implements UrlMapper {
 
     @Override
     public Optional<MapperResponse> decodeUrl(String hash) {
-        return this.cache.getUnchecked(hash)
-                .map(url -> new MapperResponse(url, true));
+        MapperResponse r = this.cache.getUnchecked(hash)
+                .map(url -> new MapperResponse(url, true))
+                .orElseGet(() -> new MapperResponse("", false));
 
+        return Optional.of(r);
     }
 }

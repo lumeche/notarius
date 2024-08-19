@@ -63,7 +63,7 @@ class DBCachedUrlMapperTest {
         //DO
         var r=testee.decodeUrl(HASH);
         //THEN
-        assertFalse(r.isPresent());
+        assertFalse(r.get().success());
     }
 
 }

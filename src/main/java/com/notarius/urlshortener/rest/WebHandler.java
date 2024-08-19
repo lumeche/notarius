@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 public class WebHandler {
     @Autowired
     private  UrlMapper mapper;
@@ -28,7 +27,7 @@ public class WebHandler {
 
     private static ResponseEntity<String> buildResponse(MapperResponse r) {
         return ResponseEntity
-                .status(r.success() ? 200 : 403)
+                .status(r.success() ? 200 : 422)
                 .body(r.result());
     }
 }

@@ -1,15 +1,33 @@
+debug: true
+
 shortener.cache:
   size: 20 #Max cache to 20 just for the example. It can get a lot larger than this.
 
-
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+        trace: true
   application.name: urlshortener
   datasource:
-    url: jdbc:h2:mem:mydb
+    url: jdbc:h2:file:/tmp/demo #FIXME: This should be configurable at runtime.
     username: sa
     password: password
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    mappings:
+      enabled: true
 

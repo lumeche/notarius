@@ -171,12 +171,8 @@ The result will be `someurl/to/be/tested`.
 
 With more time allocated to this project, the following improvements could be made:
 
-
-
 1. Add automatic end-to-end tests by loading the entire context, sending some requests, and validating that the responses are correct.
-
 2. Enhance testing on the Persistence layer by using a real H2 file with some preloaded data to ensure it's being loaded correctly.
-
 3. Conduct performance testing to highlight the benefits of using caching.
-
 4. Add parameter validations, for instance, returning an error if the user sends an incomplete URL.
+5. Preload the cache with the content of the dabase making sure to not blow up the memory.

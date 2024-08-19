@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
@@ -21,6 +23,7 @@ public class DBCachedUrlMapper implements UrlMapper {
     private HashingFunction hashingFunction;
     @Autowired
     private UrlStorage urlStorage;
+    private Executor executor;
 
     @Value("${shortener.cache.size}")
     private int cacheSize;
@@ -29,6 +32,7 @@ public class DBCachedUrlMapper implements UrlMapper {
 
     @PostConstruct
     public void setUp() {
+        this.executor= Executors.newSingleThreadExecutor();
         this.cache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .build(new CacheLoader<>() {
@@ -45,7 +49,7 @@ public class DBCachedUrlMapper implements UrlMapper {
     public Optional<MapperResponse> encodeUrl(String url) {
         try {
             var encodedUrl = hashingFunction.hash(url);
-            urlStorage.storeHashedUrl(encodedUrl, url);
+            executor.execute(()->urlStorage.storeHashedUrl(encodedUrl, url));
             this.cache.put(encodedUrl,Optional.of(url));
             return Optional.of(new MapperResponse(encodedUrl, true));
         } catch (NoSuchElementException e) {
@@ -59,7 +63,6 @@ public class DBCachedUrlMapper implements UrlMapper {
         MapperResponse r = this.cache.getUnchecked(hash)
                 .map(url -> new MapperResponse(url, true))
                 .orElseGet(() -> new MapperResponse("", false));
-
         return Optional.of(r);
     }
 }

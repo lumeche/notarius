@@ -1,6 +1,5 @@
 package com.notarius.urlshortener.controller;
 
-import com.notarius.urlshortener.persistance.PersistanceException;
 import com.notarius.urlshortener.persistance.UrlStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,13 +30,12 @@ class DBCachedUrlMapperTest {
     public static final String HASH="asdf";
 
     @BeforeEach
-    void setUp() throws PersistanceException {
+    void setUp()  {
         when(hashingFunction.hash(URL)).thenReturn(HASH);
-        when(urlStorage.storeHashedUrl(anyString(),anyString())).thenReturn(true);
     }
 
     @Test
-    public void testHashUrl() throws PersistanceException {
+    public void testHashUrl(){
         //DO
         log.info("Hashing function");
         var hash=testee.encodeUrl(URL);
@@ -48,7 +46,7 @@ class DBCachedUrlMapperTest {
     }
 
     @Test
-    public void testRetrieveStoredUrl() throws PersistanceException {
+    public void testRetrieveStoredUrl(){
         //WHEN
         when(urlStorage.retriveUrlFromHash(HASH)).thenReturn(Optional.of(URL));
         //DO

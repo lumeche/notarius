@@ -3,7 +3,6 @@ package com.notarius.urlshortener.controller;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.notarius.urlshortener.persistance.PersistanceException;
 import com.notarius.urlshortener.persistance.UrlStorage;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class DBCachedUrlMapper implements UrlMapper {
                 .maximumSize(cacheSize)
                 .build(new CacheLoader<>() {
                     @Override
-                    public Optional<String> load(String hash) throws Exception {
+                    public Optional<String> load(String hash)  {
                         var url= urlStorage.retriveUrlFromHash(hash);
                         log.info("URL {} retrieved from storage for {}",url, hash);
                         return url;
@@ -49,7 +48,7 @@ public class DBCachedUrlMapper implements UrlMapper {
             urlStorage.storeHashedUrl(encodedUrl, url);
             this.cache.put(encodedUrl,Optional.of(url));
             return Optional.of(new MapperResponse(encodedUrl, true));
-        } catch (PersistanceException | NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             log.error("Error encoding  Url", e);
             return Optional.of(new MapperResponse(Strings.EMPTY, false));
         }

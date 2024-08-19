@@ -8,19 +8,19 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class DBUrlStorage implements UrlStorage{
+public class DBUrlStorage implements UrlStorage {
     @Autowired
     private HashEntityRepository hashEntityRepository;
+
     @Override
-    public boolean storeHashedUrl(String hash, String url) throws PersistanceException {
-        hashEntityRepository.save(new HashEntity(hash,url));
-        return true;
+    public void storeHashedUrl(String hash, String url)  {
+        hashEntityRepository.save(new HashEntity(hash, url));
     }
 
     @Override
-    public Optional<String> retriveUrlFromHash(String hash) throws PersistanceException {
-        var url= hashEntityRepository.findById(hash).map(HashEntity::getUrl);
-        log.debug("url {} found over {} records",url,hashEntityRepository.count());//FIXME: Remove this
+    public Optional<String> retriveUrlFromHash(String hash)  {
+        var url = hashEntityRepository.findById(hash).map(HashEntity::getUrl);
+        log.debug("url {} found over {} records", url, hashEntityRepository.count());//FIXME: Remove this
         return url;
     }
 }

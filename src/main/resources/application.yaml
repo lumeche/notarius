@@ -13,7 +13,7 @@ spring:
         trace: true
   application.name: urlshortener
   datasource:
-    url: jdbc:h2:file:/tmp/demo #FIXME: This should be configurable at runtime.
+    url: jdbc:h2:file:/data/demo #FIXME: This should be configurable at runtime.
     username: sa
     password: password
     driverClassName: org.h2.Driver

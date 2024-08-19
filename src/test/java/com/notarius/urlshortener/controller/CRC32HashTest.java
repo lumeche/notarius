@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CRC32HashTest {
     private CRC32Hash testee;
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         testee=new CRC32Hash();
     }
     @Test
